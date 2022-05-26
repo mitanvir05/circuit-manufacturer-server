@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 const app = express();
@@ -20,6 +19,7 @@ async function run() {
   try {
     await client.connect();
     const toolCollection = client.db("circuit_store").collection("tool");
+    const reviewCollection = client.db("circuit_store").collection("review");
     app.get("/tool", async (req, res) => {
       const query = {};
       const cursor = toolCollection.find(query);
@@ -33,6 +33,12 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const tool = await toolCollection.findOne(query);
       res.send(tool);
+    });
+    //POST
+    app.post("/review", async (req, res) => {
+      const reviews = req.body;
+      const result = await reviewCollection.insertOne(reviews);
+      res.send(result);
     });
   } finally {
   }
