@@ -20,11 +20,21 @@ async function run() {
     await client.connect();
     const toolCollection = client.db("circuit_store").collection("tool");
     const reviewCollection = client.db("circuit_store").collection("review");
+    const contactCollection = client.db("circuit_store").collection("contact");
+    //for tool
     app.get("/tool", async (req, res) => {
       const query = {};
       const cursor = toolCollection.find(query);
       const tools = await cursor.toArray();
       res.send(tools);
+    });
+
+    //for review
+    app.get("/review", async (req, res) => {
+      const query = {};
+      const cursor = reviewCollection.find(query);
+      const review = await cursor.toArray();
+      res.send(review);
     });
 
     // Get
@@ -38,6 +48,18 @@ async function run() {
     app.post("/review", async (req, res) => {
       const reviews = req.body;
       const result = await reviewCollection.insertOne(reviews);
+      res.send(result);
+    });
+    //addTool
+    app.post("/tool", async (req, res) => {
+      const addTool = req.body;
+      const result = await toolCollection.insertOne(addTool);
+      res.send(result);
+    });
+    //contact
+    app.post("/contact", async (req, res) => {
+      const addContact = req.body;
+      const result = await contactCollection.insertOne(addContact);
       res.send(result);
     });
   } finally {
