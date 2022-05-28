@@ -21,6 +21,8 @@ async function run() {
     const toolCollection = client.db("circuit_store").collection("tool");
     const reviewCollection = client.db("circuit_store").collection("review");
     const contactCollection = client.db("circuit_store").collection("contact");
+    const userCollection = client.db("circuit_store").collection("users");
+    //const profileCollection = client.db("circuit_store").collection("profile");
     //for tool
     app.get("/tool", async (req, res) => {
       const query = {};
@@ -55,6 +57,24 @@ async function run() {
       const addTool = req.body;
       const result = await toolCollection.insertOne(addTool);
       res.send(result);
+    });
+    //profile data saving
+    // app.post("/profile", async (req, res) => {
+    //   const addProfile = req.body;
+    //   const result = await profileCollection.insertOne(addProfile);
+    //   res.send(result);
+    // });
+    // for user data
+    app.put("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const user = req.body;
+      const filter = { email: email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: user,
+      };
+      const result = await userCollection.updateOne(filter, updateDoc, options);
+      res.send({ result });
     });
     //contact
     app.post("/contact", async (req, res) => {
