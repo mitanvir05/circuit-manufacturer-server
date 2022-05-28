@@ -6,7 +6,7 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 const app = express();
 
-//middleware//
+//middleware////////////////
 app.use(cors());
 app.use(express.json());
 
@@ -16,7 +16,7 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
-//verifyJWT
+//verifyJWT///////////////////////
 
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
