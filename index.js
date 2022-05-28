@@ -87,6 +87,11 @@ async function run() {
       const users = await userCollection.find().toArray();
       res.send(users);
     });
+    app.get("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const users = await userCollection.findOne({ email: email });
+      res.send(users);
+    });
     //for dashboard access of admin
     app.get("/admin/:email", async (req, res) => {
       const email = req.params.email;
@@ -134,6 +139,14 @@ async function run() {
     app.post("/contact", async (req, res) => {
       const addContact = req.body;
       const result = await contactCollection.insertOne(addContact);
+      res.send(result);
+    });
+
+    //delete tools from database
+    app.delete("/tool/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await toolCollection.deleteOne(query);
       res.send(result);
     });
   } finally {
